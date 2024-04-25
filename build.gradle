@@ -1,3 +1,5 @@
+import java.util.zip.ZipOutputStream
+
 plugins {
     id 'java'
     id 'maven-publish'
@@ -12,42 +14,36 @@ repositories {
     mavenCentral()
 }
 def runeLiteVersion = 'latest.release'
+
 def rbapiVersion = 'latest.release'
 
 dependencies {
-    compileOnly group: 'net.runelite', name: 'client', version: runeLiteVersion
     compileOnly 'org.projectlombok:lombok:1.18.20'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
     testImplementation 'junit:junit:4.12'
+
+    compileOnly group: 'net.runelite', name: 'client', version: runeLiteVersion
+
     testImplementation group: 'net.runelite', name: 'client', version: runeLiteVersion
     testImplementation group: 'net.runelite', name: 'jshell', version: runeLiteVersion
+
+    // Main.Class
     implementation 'org.json:json:20230227'
 
+    // ChinBreakHandler
     implementation 'io.reactivex.rxjava3:rxjava:3.1.6'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.0.1'
-    implementation 'org.roaringbitmap:RoaringBitmap:0.9.44'
-    implementation("org.benf:cfr:0.152")
-    implementation(group: "org.java-websocket", name: "Java-WebSocket", version: "1.5.2")
+
 
     compileOnly group: 'com.example', name: 'runebotclientapi', version: rbapiVersion
     runtimeOnly group: 'com.example', name: 'runebotclientapi', version: rbapiVersion
     testImplementation group: 'com.example', name:'runebotclientapi', version: rbapiVersion
 
-    compileOnly group: 'org.mozilla', name: 'rhino', version: '1.7.14'
-    compileOnly group: 'com.fifesoft', name: 'rsyntaxtextarea', version: '3.3.4'
-    testImplementation group: 'org.mozilla', name: 'rhino', version: '1.7.14'
-    
-    testImplementation group: 'com.fifesoft', name: 'rsyntaxtextarea', version: '3.3.4'
 }
 sourceSets {
-
     main {
-
         java {
             srcDir "src"
-
         }
-
     }
 }
 
@@ -55,26 +51,72 @@ group = 'net.runelite.client.plugins'
 version = '1.4.11'
 sourceCompatibility = "11"
 
-task FatJar(type: Jar) {
+tasks.register('aio', Jar) {
     manifest {
         attributes 'Main-Class': 'net.runelite.client.plugins.Main'
     }
-    baseName = 'RuneBot'
+    getArchiveBaseName().set("RuneBot-aio")
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
-    exclude("com/example/hidden")
+    with jar
+}
+tasks.register('min', Jar) {
+    manifest {
+        attributes 'Main-Class': 'net.runelite.client.plugins.Main'
+    }
+    getArchiveBaseName().set("RuneBot-min")
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    exclude("net/runelite/client")
     with jar
 }
 
-task FatJarWithHidden(type: Jar) {
-    manifest {
-        attributes 'Main-Class': 'net.runelite.client.plugins.Main'
+import java.util.zip.ZipEntry
+import java.util.zip.ZipInputStream
+import java.util.zip.ZipOutputStream
+
+tasks.register('DisableRender') {
+    dependsOn tasks.named('aio')
+
+    doLast {
+        // Define the input and output paths
+        def inputJar = tasks.aio.archiveFile.get().asFile
+        def outputJar = file("$buildDir/libs/RuneBot-renderstop-"+ version +".jar")
+
+        outputJar.withOutputStream { outputStream ->
+            def zipIn = new ZipInputStream(new FileInputStream(inputJar))
+            def zipOut = new ZipOutputStream(outputStream)
+
+            // Iterate over the entries in the input JAR
+            def entry = zipIn.nextEntry
+            while (entry != null) {
+                def entryName = entry.name
+                println(entryName)
+                println(!entryName.startsWith('net/runelite/client/plugins/') || entryName.contains('net/runelite/client/plugins/renderstop/'))
+                if (!entryName.startsWith('net/runelite/client/plugins/') || entryName.contains('net/runelite/client/plugins/renderstop/')) {
+                    zipOut.putNextEntry(new ZipEntry(entryName))
+                    byte[] buffer = new byte[1024]
+                    int bytesRead
+                    while ((bytesRead = zipIn.read(buffer)) != -1) {
+                        zipOut.write(buffer, 0, bytesRead)
+                    }
+                    zipOut.closeEntry()
+                }
+                entry = zipIn.nextEntry
+            }
+
+            zipOut.close()
+            zipIn.close()
+        }
     }
-    baseName = 'RuneBot'
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
 }
+
+tasks.register("build-all") {
+    dependsOn tasks.named('aio')
+    dependsOn tasks.named('min')
+    dependsOn tasks.named('DisableRender')
+}
+
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
