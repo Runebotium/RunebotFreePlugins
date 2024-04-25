@@ -42,8 +42,6 @@ import static net.runelite.client.plugins.TitheFarm.utils.Helpers.nextInt;
         enabledByDefault = false,
         tags = {"rb", "RB"}
 )
-@PluginDependency(EthanApiPlugin.class)
-@PluginDependency(PacketUtilsPlugin.class)
 public class TithePlugin extends Plugin {
 
     private final int GOLOVANOVA_SEED = 13423;

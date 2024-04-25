@@ -7,16 +7,12 @@ repositories {
     mavenLocal()
     maven {url = 'https://repo.runelite.net/'}
     maven {
-
-        url = 'https://maven.pkg.github.com/SkylerPIlot/RBEVPmvn'
-        credentials {
-            username = "DBloodworth95"
-            password = ""
-        }
+        url = 'https://repo.leigham.uk/releases/runebotclientapi'
     }
     mavenCentral()
 }
-def runeLiteVersion = '1.10.23.1'
+def runeLiteVersion = 'latest.release'
+def rbapiVersion = 'latest.release'
 
 dependencies {
     compileOnly group: 'net.runelite', name: 'client', version: runeLiteVersion
@@ -33,29 +29,14 @@ dependencies {
     implementation("org.benf:cfr:0.152")
     implementation(group: "org.java-websocket", name: "Java-WebSocket", version: "1.5.2")
 
-    compileOnly group: 'com.example', name: 'rbapi', version: '1.7.8'
+    compileOnly group: 'com.example', name: 'runebotclientapi', version: rbapiVersion
+    runtimeOnly group: 'com.example', name: 'runebotclientapi', version: rbapiVersion
+    testImplementation group: 'com.example', name:'runebotclientapi', version: rbapiVersion
 
-    runtimeOnly group: 'com.example', name: 'rbapi', version: '1.7.8'
-    testImplementation group: 'com.example', name: 'rbapi', version: '0.7.2'
-
-
-    //runtimeOnly 'org.bytedeco:javacv-platform:1.5.5'
-
-    // https://mvnrepository.com/artifact/org.mozilla/javascript
     compileOnly group: 'org.mozilla', name: 'rhino', version: '1.7.14'
-
-// https://mvnrepository.com/artifact/com.fifesoft/rsyntaxtextarea
     compileOnly group: 'com.fifesoft', name: 'rsyntaxtextarea', version: '3.3.4'
-// https://mvnrepository.com/artifact/org.mozilla/rhino
-    //runtimeOnly group: 'org.mozilla', name: 'rhino', version: '1.7.14'
-
-// https://mvnrepository.com/artifact/com.fifesoft/rsyntaxtextarea
-    //
-    // runtimeOnly group: 'com.fifesoft', name: 'rsyntaxtextarea', version: '3.3.4'
-    // https://mvnrepository.com/artifact/org.mozilla/javascript
     testImplementation group: 'org.mozilla', name: 'rhino', version: '1.7.14'
-
-// https://mvnrepository.com/artifact/com.fifesoft/rsyntaxtextarea
+    
     testImplementation group: 'com.fifesoft', name: 'rsyntaxtextarea', version: '3.3.4'
 }
 sourceSets {
@@ -73,23 +54,6 @@ sourceSets {
 group = 'net.runelite.client.plugins'
 version = '1.4.11'
 sourceCompatibility = "11"
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
-    }
-    repositories {
-        maven {
-            credentials {
-                username 'DBloodworth95'
-                password ''
-            }
-            url "https://maven.pkg.github.com/SkylerPIlot/RBEVPmvn"
-        }
-    }
-}
 
 task FatJar(type: Jar) {
     manifest {

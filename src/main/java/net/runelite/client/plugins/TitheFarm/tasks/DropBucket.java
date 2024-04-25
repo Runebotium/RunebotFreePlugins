@@ -1,7 +1,6 @@
 package net.runelite.client.plugins.TitheFarm.tasks;
 
 import com.example.EthanApiPlugin.Collections.Inventory;
-import com.example.EthanApiPlugin.EthanApiPlugin;
 import com.example.InteractionApi.InventoryInteraction;
 import net.runelite.client.plugins.TitheFarm.utils.Task;
 import net.runelite.client.plugins.TitheFarm.utils.Time;

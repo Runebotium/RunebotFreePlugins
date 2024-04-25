@@ -33,8 +33,6 @@ import java.util.List;
         enabledByDefault = false,
         tags = {"ethan"}
 )
-@PluginDependency(PacketUtilsPlugin.class)
-//@PluginDependency(EthanApiPlugin.class)
 public class LavaRunecrafterPlugin extends Plugin {
     public int timeout = 0;
     public int bindingCharges = -1;
@@ -46,8 +44,6 @@ public class LavaRunecrafterPlugin extends Plugin {
     HashMap<Widget, int[]> pouches = new HashMap<>();
     @Inject
     LavaRunecrafterPluginConfig config;
-    @Inject
-    EthanApiPlugin ethanPlugin;
 
 
     @Provides
@@ -131,7 +127,7 @@ public class LavaRunecrafterPlugin extends Plugin {
                         //System.out.println("breaking binding");
                         MousePackets.queueClickPacket();
                         WidgetPackets.queueWidgetActionPacket(1, 25362449, -1, -1);
-                        int space = ethanPlugin.getFirstFreeSlot(WidgetInfo.INVENTORY);
+                        int space = EthanApiPlugin.getFirstFreeSlot(WidgetInfo.INVENTORY);
                         MousePackets.queueClickPacket();
                         WidgetPackets.queueWidgetActionPacket(7, 9764864, ItemID.BINDING_NECKLACE, space);
                         MousePackets.queueClickPacket();
@@ -157,7 +153,7 @@ public class LavaRunecrafterPlugin extends Plugin {
             }
             if (binding == null) {
                 //System.out.println("new binding");
-                int freeSlot = ethanPlugin.getFirstFreeSlot(WidgetInfo.INVENTORY);
+                int freeSlot = EthanApiPlugin.getFirstFreeSlot(WidgetInfo.INVENTORY);
                 Widget bindingNeck = EthanApiPlugin.getItem(ItemID.BINDING_NECKLACE, WidgetInfo.BANK_ITEM_CONTAINER);
                 if (bindingNeck == null) {
                     EthanApiPlugin.stopPlugin(this);
@@ -202,7 +198,7 @@ public class LavaRunecrafterPlugin extends Plugin {
             timeout = 5;
             return;
         }
-        TileObject ruins = ethanPlugin.findObject(34817);
+        TileObject ruins = EthanApiPlugin.findObject(34817);
         if (ruins != null) {
             if (EthanApiPlugin.isMoving()) {
                 return;
@@ -213,7 +209,7 @@ public class LavaRunecrafterPlugin extends Plugin {
             ObjectPackets.queueObjectAction(1, 34817, 3312, 3254, false);
             return;
         }
-        TileObject altar = ethanPlugin.findObject("Altar");
+        TileObject altar = EthanApiPlugin.findObject("Altar");
         Widget earthRunes = EthanApiPlugin.getItem(ItemID.EARTH_RUNE, WidgetInfo.INVENTORY);
         if (altar != null && earthRunes != null) {
             if (EthanApiPlugin.isMoving() && client.getLocalPlayer().getAnimation() != 791) {
@@ -232,7 +228,7 @@ public class LavaRunecrafterPlugin extends Plugin {
             }
             int essenceInPouches = essenceInPouches();
             if (essenceInPouches > 0) {
-                if (ethanPlugin.getFirstFreeSlot(WidgetInfo.INVENTORY) != -1) {
+                if (EthanApiPlugin.getFirstFreeSlot(WidgetInfo.INVENTORY) != -1) {
                     //System.out.println(client.getTickCount() + ": withdrawing essence");
                     handleWithdraw();
                     MousePackets.queueClickPacket();
@@ -251,18 +247,18 @@ public class LavaRunecrafterPlugin extends Plugin {
     }
 
     public boolean pouchesDegraded() {
-        return ethanPlugin.getItemFromList(new int[]{ItemID.MEDIUM_POUCH_5511, ItemID.LARGE_POUCH_5513, ItemID.GIANT_POUCH_5515,
+        return EthanApiPlugin.getItemFromList(new int[]{ItemID.MEDIUM_POUCH_5511, ItemID.LARGE_POUCH_5513, ItemID.GIANT_POUCH_5515,
                 ItemID.COLOSSAL_POUCH_26786}, WidgetInfo.INVENTORY) != null;
     }
 
     public void handleDueling() {
-        Widget dueling = ethanPlugin.getItemFromList(new int[]{ItemID.RING_OF_DUELING1, ItemID.RING_OF_DUELING2,
+        Widget dueling = EthanApiPlugin.getItemFromList(new int[]{ItemID.RING_OF_DUELING1, ItemID.RING_OF_DUELING2,
                 ItemID.RING_OF_DUELING3, ItemID.RING_OF_DUELING4, ItemID.RING_OF_DUELING5, ItemID.RING_OF_DUELING6, ItemID.RING_OF_DUELING7, ItemID.RING_OF_DUELING8}, WidgetInfo.BANK_ITEM_CONTAINER);
-        int equippedDueling = ethanPlugin.checkIfWearing(new int[]{ItemID.RING_OF_DUELING1, ItemID.RING_OF_DUELING2,
+        int equippedDueling = EthanApiPlugin.checkIfWearing(new int[]{ItemID.RING_OF_DUELING1, ItemID.RING_OF_DUELING2,
                 ItemID.RING_OF_DUELING3, ItemID.RING_OF_DUELING4, ItemID.RING_OF_DUELING5, ItemID.RING_OF_DUELING6,
                 ItemID.RING_OF_DUELING7, ItemID.RING_OF_DUELING8});
         if (config.TeleMethod() == TeleportMethods.RING_OF_DUELING) {
-            dueling = ethanPlugin.getItemFromList(new int[]{ItemID.RING_OF_DUELING2, ItemID.RING_OF_DUELING4,
+            dueling = EthanApiPlugin.getItemFromList(new int[]{ItemID.RING_OF_DUELING2, ItemID.RING_OF_DUELING4,
                     ItemID.RING_OF_DUELING6, ItemID.RING_OF_DUELING8}, WidgetInfo.BANK_ITEM_CONTAINER);
             if (equippedDueling != -1) {
                 if (List.of(ItemID.RING_OF_DUELING2, ItemID.RING_OF_DUELING4,
@@ -277,7 +273,7 @@ public class LavaRunecrafterPlugin extends Plugin {
         if (equippedDueling != -1) {
             return;
         }
-        int freeSlot = ethanPlugin.getFirstFreeSlot(WidgetInfo.BANK_INVENTORY_ITEMS_CONTAINER);
+        int freeSlot = EthanApiPlugin.getFirstFreeSlot(WidgetInfo.BANK_INVENTORY_ITEMS_CONTAINER);
         if (dueling == null) {
             EthanApiPlugin.stopPlugin(this);
             client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Out of dueling rings", "LavaRunecrafterPlugin");
@@ -289,7 +285,7 @@ public class LavaRunecrafterPlugin extends Plugin {
     }
 
     public void handleWithdraw() {
-        int freeSlots = ethanPlugin.getEmptySlots(WidgetInfo.INVENTORY);
+        int freeSlots = EthanApiPlugin.getEmptySlots(WidgetInfo.INVENTORY);
         for (Widget pouch : pouches.keySet()) {
             if (pouches.get(pouch)[0] > 0) {
                 int taken = Math.min(pouches.get(pouch)[0], freeSlots);
@@ -330,7 +326,7 @@ public class LavaRunecrafterPlugin extends Plugin {
     }
 
     public void handleStamina() {
-        int freeSlot = ethanPlugin.getFirstFreeSlot(WidgetInfo.BANK_INVENTORY_ITEMS_CONTAINER);
+        int freeSlot = EthanApiPlugin.getFirstFreeSlot(WidgetInfo.BANK_INVENTORY_ITEMS_CONTAINER);
         Widget stamina = EthanApiPlugin.getItem(ItemID.STAMINA_POTION1, WidgetInfo.BANK_ITEM_CONTAINER);
         if (client.getEnergy() > 8000 || client.getVarbitValue(Varbits.RUN_SLOWED_DEPLETION_ACTIVE) == 1) {
             //System.out.println("didnt need stamina");
@@ -362,7 +358,7 @@ public class LavaRunecrafterPlugin extends Plugin {
             client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Out of essence", "LavaRunecrafterPlugin");
         }
         int essenceSlots =
-                ethanPlugin.getEmptySlots(WidgetInfo.BANK_INVENTORY_ITEMS_CONTAINER) + getEssenceSlots(WidgetInfo.BANK_INVENTORY_ITEMS_CONTAINER);
+                EthanApiPlugin.getEmptySlots(WidgetInfo.BANK_INVENTORY_ITEMS_CONTAINER) + getEssenceSlots(WidgetInfo.BANK_INVENTORY_ITEMS_CONTAINER);
         while (essenceNeeded() > 0) {
             ////System.out.println("withdrawing all");
             MousePackets.queueClickPacket();
