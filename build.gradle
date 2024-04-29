@@ -9,13 +9,13 @@ repositories {
     mavenLocal()
     maven {url = 'https://repo.runelite.net/'}
     maven {
-        url = 'https://repo.leigham.uk/releases/runebotclientapi'
+        url = 'https://repo.leigham.uk/snapshots/runebotclientapi'
     }
     mavenCentral()
 }
 def runeLiteVersion = 'latest.release'
 
-def rbapiVersion = 'latest.release'
+def rbapiVersion = '0.0.9-beta'
 
 dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.20'
@@ -48,7 +48,7 @@ sourceSets {
 }
 
 group = 'net.runelite.client.plugins'
-version = '1.4.11'
+version = rbapiVersion
 sourceCompatibility = "11"
 
 tasks.register('aio', Jar) {
