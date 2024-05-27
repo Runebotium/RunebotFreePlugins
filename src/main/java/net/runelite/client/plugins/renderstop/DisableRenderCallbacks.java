@@ -5,6 +5,7 @@ import net.runelite.api.hooks.DrawCallbacks;
 
 public class DisableRenderCallbacks implements DrawCallbacks {
 
+
     @Override
     public void draw(Projection projection, Scene scene, Renderable renderable, int i, int i1, int i2, int i3, long l) {
 
@@ -49,10 +50,5 @@ public class DisableRenderCallbacks implements DrawCallbacks {
     @Override
     public void swapScene(Scene scene) {
 
-    }
-
-    @Override
-    public boolean tileInFrustum(Scene scene, int pitchSin, int pitchCos, int yawSin, int yawCos, int cameraX, int cameraY, int cameraZ, int plane, int msx, int msy) {
-        return DrawCallbacks.super.tileInFrustum(scene, pitchSin, pitchCos, yawSin, yawCos, cameraX, cameraY, cameraZ, plane, msx, msy);
     }
 }
