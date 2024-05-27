@@ -74,12 +74,10 @@ public class TithePlugin extends Plugin {
     @Getter
     private Activity currentActivity;
     private Activity previousActivity;
-    ScheduledExecutorService executor;
     protected int lastActionTick = 0;
     @Getter
     private boolean running;
-    private ScheduledFuture<?> current;
-    private ScheduledFuture<?> next;
+
     private TitheConfig.Route route;
     @Subscribe
     private void onGameTick(GameTick event) {
@@ -96,22 +94,7 @@ public class TithePlugin extends Plugin {
             if (config.debug()){
                 EthanApiPlugin.sendClientMessage("Current Activity" + currentActivity.getName());
             }
-            if (current == null) {
-                current = schedule(this::tick);
-            } else {
-                if (current.isDone()) {
-                    if (next == null) {
-                        current = schedule(this::tick);
-                    } else {
-                        current = next;
-                        next = null;
-                    }
-                } else {
-                    if (next == null) {
-                        next = schedule(this::tick);
-                    }
-                }
-            }
+            tick();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -133,7 +116,6 @@ public class TithePlugin extends Plugin {
     }
     @Override
     protected void startUp() {
-        executor = new LoggableExecutor(1);
         overlayManager.add(overlay);
         running = true;
         timer = Instant.now();
@@ -230,14 +212,11 @@ public class TithePlugin extends Plugin {
 
         tasks.clear();
         patches.clear();
-        current = null;
-        next = null;
         startPoint = null;
         harvested = false;
         runs = 0;
         previousActivity = Activity.IDLE;
         currentActivity = Activity.IDLE;
-        executor.shutdownNow();
         overlayManager.remove(overlay);
         timer = null;
 
@@ -261,15 +240,7 @@ public class TithePlugin extends Plugin {
             }
         }
     }
-    protected ScheduledFuture<?> schedule(Runnable runnable) {
-        final int minDelay = Math.min(250, 300);
-        final int maxDelay = Math.max(250, 300);
 
-        return executor.schedule(
-                runnable,
-                nextInt(minDelay, maxDelay), TimeUnit.MILLISECONDS
-        );
-    }
 
     @Subscribe
     private void onStatChanged(StatChanged statChanged) {

@@ -52,7 +52,7 @@ public final class BloatDown {
         int[] offsets = offsetsSupplier.get();
         WorldPoint wl = start;
 
-        for(WorldArea wa = new WorldArea(start, 1, 1); wa.canTravelInDirection(client, offsets[0], offsets[1]); wa = new WorldArea(wl, 1, 1)) {
+        for(WorldArea wa = new WorldArea(start, 1, 1); wa.canTravelInDirection(client.getTopLevelWorldView(), offsets[0], offsets[1]); wa = new WorldArea(wl, 1, 1)) {
             wl = wa.toWorldPoint().dx(offsets[0]).dy(offsets[1]);
         }
 

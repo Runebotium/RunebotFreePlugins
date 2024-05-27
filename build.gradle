@@ -1,4 +1,3 @@
-import java.util.zip.ZipOutputStream
 
 plugins {
     id 'java'
@@ -9,13 +8,14 @@ repositories {
     mavenLocal()
     maven {url = 'https://repo.runelite.net/'}
     maven {
-        url = 'https://repo.leigham.uk/snapshots/runebotclientapi'
+        name = "reposiliteRepository"
+        url = "https://repo.leigham.uk/releases/runebotclientapi"
     }
     mavenCentral()
 }
 def runeLiteVersion = 'latest.release'
 
-def rbapiVersion = '0.0.9-beta'
+def rbapiVersion = '0.1.34'
 
 dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.20'
@@ -32,6 +32,8 @@ dependencies {
 
     // ChinBreakHandler
     implementation 'io.reactivex.rxjava3:rxjava:3.1.6'
+    implementation group: 'net.runelite', name: 'client', version: runeLiteVersion
+
 
 
     compileOnly group: 'com.example', name: 'runebotclientapi', version: rbapiVersion

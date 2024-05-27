@@ -6,17 +6,17 @@ import net.runelite.api.hooks.DrawCallbacks;
 public class DisableRenderCallbacks implements DrawCallbacks {
 
     @Override
-    public void draw(Renderable renderable, int orientation, int pitchSin, int pitchCos, int yawSin, int yawCos, int x, int y, int z, long hash) {
+    public void draw(Projection projection, Scene scene, Renderable renderable, int i, int i1, int i2, int i3, long l) {
 
     }
 
     @Override
-    public void drawScenePaint(int orientation, int pitchSin, int pitchCos, int yawSin, int yawCos, int x, int y, int z, SceneTilePaint paint, int tileZ, int tileX, int tileY, int zoom, int centerX, int centerY) {
+    public void drawScenePaint(Scene scene, SceneTilePaint sceneTilePaint, int i, int i1, int i2) {
 
     }
 
     @Override
-    public void drawSceneModel(int orientation, int pitchSin, int pitchCos, int yawSin, int yawCos, int x, int y, int z, SceneTileModel model, int tileZ, int tileX, int tileY, int zoom, int centerX, int centerY) {
+    public void drawSceneTileModel(Scene scene, SceneTileModel sceneTileModel, int i, int i1) {
 
     }
 
@@ -26,8 +26,10 @@ public class DisableRenderCallbacks implements DrawCallbacks {
     }
 
     @Override
-    public void drawScene(int cameraX, int cameraY, int cameraZ, int cameraPitch, int cameraYaw, int plane) {
+    public void drawScene(double v, double v1, double v2, double v3, double v4, int i) {
+
     }
+
 
     @Override
     public void postDrawScene() {
@@ -47,5 +49,10 @@ public class DisableRenderCallbacks implements DrawCallbacks {
     @Override
     public void swapScene(Scene scene) {
 
+    }
+
+    @Override
+    public boolean tileInFrustum(Scene scene, int pitchSin, int pitchCos, int yawSin, int yawCos, int cameraX, int cameraY, int cameraZ, int plane, int msx, int msy) {
+        return DrawCallbacks.super.tileInFrustum(scene, pitchSin, pitchCos, yawSin, yawCos, cameraX, cameraY, cameraZ, plane, msx, msy);
     }
 }

@@ -114,15 +114,6 @@ public class ToaPlugin extends Plugin {
     public void startUp() {
 
         revs = true;
-		if(client.getRevision() != 221){
-			revs = false;
-			JCheckBox checkbox = new JCheckBox();
-			checkbox.setBackground(ColorScheme.LIGHT_GRAY_COLOR);
-			final int result = JOptionPane.showOptionDialog(checkbox, "REVS OUTDATED: Overlays Only For TOA Plugin",
-				"REVS OUTDATED", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE,
-				null, new String[]{"I Understand", "What?"}, "No");
-		}
-
 
         if (rooms == null)
         {
