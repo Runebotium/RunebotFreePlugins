@@ -11,11 +11,12 @@ repositories {
     maven {
         url = 'https://repo.leigham.uk/releases/runebotclientapi'
     }
+    jcenter()
     mavenCentral()
 }
 def runeLiteVersion = 'latest.release'
 
-def rbapiVersion = '0.1.36'
+def rbapiVersion = '0.1.47'
 
 dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.20'
@@ -33,10 +34,10 @@ dependencies {
     // ChinBreakHandler
     implementation 'io.reactivex.rxjava3:rxjava:3.1.6'
 
-
     compileOnly group: 'com.example', name: 'runebotclientapi', version: rbapiVersion
     runtimeOnly group: 'com.example', name: 'runebotclientapi', version: rbapiVersion
     testImplementation group: 'com.example', name:'runebotclientapi', version: rbapiVersion
+    implementation("com.google.archivepatcher:archive-patch-applier:1.0.4")
 
 }
 sourceSets {

@@ -1,5 +1,7 @@
 package net.runelite.client.plugins.spoontob;
 
+import com.example.RuneBotApi.Collections.Equipment;
+import com.example.RuneBotApi.RBApi;
 import net.runelite.client.ui.overlay.OverlayManager;
 
 import javax.inject.Inject;

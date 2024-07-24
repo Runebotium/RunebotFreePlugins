@@ -1,9 +1,0 @@
-<changelist name="Uncommitted_changes_before_rebase_[Changes]" date="1716852748885" recycled="true" deleted="true">
-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]/shelved.patch" />
-  <option name="DESCRIPTION" value="Uncommitted changes before rebase [Changes]" />
-  <binary>
-    <option name="BEFORE_PATH" value=".gradle/buildOutputCleanup/outputFiles.bin" />
-    <option name="AFTER_PATH" value=".gradle/buildOutputCleanup/outputFiles.bin" />
-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]/outputFiles.bin" />
-  </binary>
-</changelist>
