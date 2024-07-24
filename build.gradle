@@ -76,21 +76,28 @@ tasks.register('DisableRender') {
         def outputJar = file("$buildDir/libs/RuneBot-renderstop-${version}.jar")
 
         outputJar.withOutputStream { outputStream ->
-            new ZipInputStream(new FileInputStream(inputJar)).withStream { zipIn ->
-                new ZipOutputStream(outputStream).withStream { zipOut ->
-                    ZipEntry entry
-                    while ((entry = zipIn.nextEntry) != null) {
-                        if (!entry.name.startsWith('net/runelite/client/plugins/') || entry.name.contains('net/runelite/client/plugins/renderstop/')) {
-                            zipOut.putNextEntry(new ZipEntry(entry.name))
-                            zipIn.copyTo(zipOut)
-                            zipOut.closeEntry()
-                        }
+            def zipIn = new ZipInputStream(new FileInputStream(inputJar))
+            def zipOut = new ZipOutputStream(outputStream)
+            byte[] buffer = new byte[1024]
+
+            ZipEntry entry
+            while ((entry = zipIn.nextEntry) != null) {
+                if (!entry.name.startsWith('net/runelite/client/plugins/') || entry.name.contains('net/runelite/client/plugins/renderstop/')) {
+                    zipOut.putNextEntry(new ZipEntry(entry.name))
+                    int len
+                    while ((len = zipIn.read(buffer)) > 0) {
+                        zipOut.write(buffer, 0, len)
                     }
+                    zipOut.closeEntry()
                 }
             }
+
+            zipIn.close()
+            zipOut.close()
         }
     }
 }
+
 
 tasks.register("build-all") {
     dependsOn tasks.named('aio')
