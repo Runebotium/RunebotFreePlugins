@@ -1,5 +1,3 @@
-import java.util.zip.ZipOutputStream
-
 plugins {
     id 'java'
     id 'maven-publish'
@@ -7,16 +5,16 @@ plugins {
 
 repositories {
     mavenLocal()
-    maven {url = 'https://repo.runelite.net/'}
-    maven {
-        url = 'https://repo.leigham.uk/releases/runebotclientapi'
-    }
+    maven { url = 'https://repo.runelite.net/' }
+    maven { url = 'https://repo.leigham.uk/releases/runebotclientapi' }
     jcenter()
     mavenCentral()
 }
+
 def runeLiteVersion = 'latest.release'
 
-def rbapiVersion = '0.1.47'
+// Define rbapiVersion with a default value, which can be overridden from the command line
+def rbapiVersion = project.hasProperty('rbapiVersion') ? project.rbapiVersion : '0.1.47'
 
 dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.20'
@@ -24,90 +22,71 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     compileOnly group: 'net.runelite', name: 'client', version: runeLiteVersion
-
     testImplementation group: 'net.runelite', name: 'client', version: runeLiteVersion
     testImplementation group: 'net.runelite', name: 'jshell', version: runeLiteVersion
 
-    // Main.Class
     implementation 'org.json:json:20230227'
-
-    // ChinBreakHandler
     implementation 'io.reactivex.rxjava3:rxjava:3.1.6'
-
     compileOnly group: 'com.example', name: 'runebotclientapi', version: rbapiVersion
     runtimeOnly group: 'com.example', name: 'runebotclientapi', version: rbapiVersion
-    testImplementation group: 'com.example', name:'runebotclientapi', version: rbapiVersion
-    implementation("com.google.archivepatcher:archive-patch-applier:1.0.4")
-
+    testImplementation group: 'com.example', name: 'runebotclientapi', version: rbapiVersion
+    implementation 'com.google.archivepatcher:archive-patch-applier:1.0.4'
 }
+
 sourceSets {
     main {
         java {
-            srcDir "src"
+            srcDir 'src'
         }
     }
 }
 
 group = 'net.runelite.client.plugins'
 version = rbapiVersion
-sourceCompatibility = "11"
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
 
 tasks.register('aio', Jar) {
     manifest {
         attributes 'Main-Class': 'net.runelite.client.plugins.Main'
     }
-    getArchiveBaseName().set("RuneBot-aio")
+    archiveBaseName.set("RuneBot-aio")
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
 }
+
 tasks.register('min', Jar) {
     manifest {
         attributes 'Main-Class': 'net.runelite.client.plugins.Main'
     }
-    getArchiveBaseName().set("RuneBot-min")
+    archiveBaseName.set("RuneBot-min")
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     exclude("net/runelite/client")
-    with jar
 }
-
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
-
 tasks.register('DisableRender') {
     dependsOn tasks.named('aio')
 
     doLast {
-        // Define the input and output paths
-        def inputJar = tasks.aio.archiveFile.get().asFile
-        def outputJar = file("$buildDir/libs/RuneBot-renderstop-"+ version +".jar")
+        def inputJar = tasks.aio.get().archiveFile.get().asFile
+        def outputJar = file("$buildDir/libs/RuneBot-renderstop-${version}.jar")
 
         outputJar.withOutputStream { outputStream ->
-            def zipIn = new ZipInputStream(new FileInputStream(inputJar))
-            def zipOut = new ZipOutputStream(outputStream)
-
-            // Iterate over the entries in the input JAR
-            def entry = zipIn.nextEntry
-            while (entry != null) {
-                def entryName = entry.name
-                println(entryName)
-                println(!entryName.startsWith('net/runelite/client/plugins/') || entryName.contains('net/runelite/client/plugins/renderstop/'))
-                if (!entryName.startsWith('net/runelite/client/plugins/') || entryName.contains('net/runelite/client/plugins/renderstop/')) {
-                    zipOut.putNextEntry(new ZipEntry(entryName))
-                    byte[] buffer = new byte[1024]
-                    int bytesRead
-                    while ((bytesRead = zipIn.read(buffer)) != -1) {
-                        zipOut.write(buffer, 0, bytesRead)
+            new ZipInputStream(new FileInputStream(inputJar)).withStream { zipIn ->
+                new ZipOutputStream(outputStream).withStream { zipOut ->
+                    ZipEntry entry
+                    while ((entry = zipIn.nextEntry) != null) {
+                        if (!entry.name.startsWith('net/runelite/client/plugins/') || entry.name.contains('net/runelite/client/plugins/renderstop/')) {
+                            zipOut.putNextEntry(new ZipEntry(entry.name))
+                            zipIn.copyTo(zipOut)
+                            zipOut.closeEntry()
+                        }
                     }
-                    zipOut.closeEntry()
                 }
-                entry = zipIn.nextEntry
             }
-
-            zipOut.close()
-            zipIn.close()
         }
     }
 }
@@ -121,4 +100,3 @@ tasks.register("build-all") {
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
-targetCompatibility = JavaVersion.VERSION_11
