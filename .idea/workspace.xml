@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="43fcba0a-a89a-4c77-a958-0fb191f120c5" name="Changes" comment="Updated for 0.1.36&#10;Still needs some dependencies">
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+    <list default="true" id="43fcba0a-a89a-4c77-a958-0fb191f120c5" name="Changes" comment="Should auto release">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/runelite/client/plugins/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/runelite/client/plugins/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,22 +77,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Gradle.RunebotFreePlugins [aio].executor": "Run",
-    "Gradle.RunebotFreePlugins [build-all].executor": "Run",
-    "Gradle.RunebotFreePlugins [min].executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "kotlin-language-version-configured": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Gradle.RunebotFreePlugins [aio].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.RunebotFreePlugins [build-all].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.RunebotFreePlugins [min].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="Z:\RunebotFreePlugins\.github\workflows" />
     </key>
   </component>
   <component name="RunManager" selected="Gradle.RunebotFreePlugins [build-all]">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="net.runelite.client.plugins.Main" />
+      <module name="example.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="net.runelite.client.plugins.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="RunebotFreePlugins [aio]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -162,6 +175,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.RunebotFreePlugins [build-all]" />
+        <item itemvalue="Application.Main" />
         <item itemvalue="Gradle.RunebotFreePlugins [min]" />
         <item itemvalue="Gradle.RunebotFreePlugins [aio]" />
       </list>
@@ -271,11 +285,20 @@
       <option name="project" value="LOCAL" />
       <updated>1721803964672</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Should auto release">
+      <option name="closed" value="true" />
+      <created>1721805369663</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1721805369663</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Updated for 0.1.36&#10;Still needs some dependencies" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated for 0.1.36&#10;Still needs some dependencies" />
+    <MESSAGE value="Should auto release" />
+    <option name="LAST_COMMIT_MESSAGE" value="Should auto release" />
   </component>
 </project>

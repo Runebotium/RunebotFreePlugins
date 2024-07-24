@@ -50,6 +50,16 @@ targetCompatibility = JavaVersion.VERSION_11
 tasks.register('aio', Jar) {
     getArchiveBaseName().set("RuneBot-AIO")
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    // main manifest attributes
+    manifest {
+        attributes(
+                //Z:\RunebotFreePlugins\src\main\java\net\runelite\client\plugins\Main.java
+                'Main-Class': 'net.runelite.client.plugins.Main',
+                'Implementation-Title': 'RuneBot',
+                'Implementation-Version': version
+        )
+    }
+
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
@@ -58,6 +68,14 @@ tasks.register('aio', Jar) {
 tasks.register('min', Jar) {
     getArchiveBaseName().set("RuneBot-MIN")
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+        attributes(
+                //Z:\RunebotFreePlugins\src\main\java\net\runelite\client\plugins\Main.java
+                'Main-Class': 'net.runelite.client.plugins.Main',
+                'Implementation-Title': 'RuneBot',
+                'Implementation-Version': version
+        )
+    }
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     exclude('net/**')
     with jar
@@ -95,6 +113,16 @@ tasks.register('DisableRender') {
             zipIn.close()
             zipOut.close()
         }
+    }
+
+    // main manifest attributes
+    manifest {
+        attributes(
+                //Z:\RunebotFreePlugins\src\main\java\net\runelite\client\plugins\Main.java
+                'Main-Class': 'net.runelite.client.plugins.Main',
+                'Implementation-Title': 'RuneBot',
+                'Implementation-Version': version
+        )
     }
 }
 
