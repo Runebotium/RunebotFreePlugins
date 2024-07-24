@@ -4,6 +4,11 @@ on:
   repository_dispatch:
     types: [trigger-action]
 
+permissions:
+  contents: write
+  packages: write
+  actions: write
+
 jobs:
   build:
     runs-on: ubuntu-latest

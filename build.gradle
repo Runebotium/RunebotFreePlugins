@@ -46,6 +46,9 @@ version = rbapiVersion
 sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
+import java.util.zip.ZipEntry
+import java.util.zip.ZipInputStream
+import java.util.zip.ZipOutputStream
 tasks.register('aio', Jar) {
     manifest {
         attributes 'Main-Class': 'net.runelite.client.plugins.Main'
@@ -64,14 +67,12 @@ tasks.register('min', Jar) {
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     exclude("net/runelite/client")
 }
-import java.util.zip.ZipEntry
-import java.util.zip.ZipInputStream
-import java.util.zip.ZipOutputStream
+
 tasks.register('DisableRender') {
     dependsOn tasks.named('aio')
 
     doLast {
-        def inputJar = tasks.aio.get().archiveFile.get().asFile
+        def inputJar = tasks.named('aio').get().archiveFile.get().asFile
         def outputJar = file("$buildDir/libs/RuneBot-renderstop-${version}.jar")
 
         outputJar.withOutputStream { outputStream ->
