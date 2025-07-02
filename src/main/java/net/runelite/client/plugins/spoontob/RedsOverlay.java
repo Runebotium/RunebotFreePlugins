@@ -49,7 +49,7 @@
    
    public Dimension render(Graphics2D graphics) {
      if (config.redsTL() != SpoonTobConfig.redsTlMode.OFF && plugin.enforceRegion()) {
-       for (NPC reds : client.getNpcs()) {
+       for (NPC reds : client.getNpc()) {
          if (reds.getName() != null && reds.getName().equalsIgnoreCase("nylocas matomenos")) {
            NPCComposition composition = reds.getComposition();
            int size = composition.getSize();
